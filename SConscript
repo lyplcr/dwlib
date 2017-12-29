@@ -1,4 +1,4 @@
-from building import *
+from building import * 
 
 # get current dir path
 cwd = GetCurrentDir()
@@ -8,36 +8,30 @@ src = []
 inc = []
 
 # add dwin common include
-inc = inc + [cwd + '/dwlib']
+inc = inc + [cwd + "/dwin"]
 
 # add dwin basic code
-src = src + ['./dwlib/basic/src/dw_init.c']
-src = src + ['./dwlib/basic/src/dw_space.c']
-inc = inc + [cwd + '/dwlib/basic/inc']
+inc = inc + [cwd + "/dwin/basic"]
+src = src + Glob('./dwin/basic/*.c')
 
-#add dwin plugins code 
+# add dwin plugins code 
+if GetDepend('PKG_DWIN_ENABLE_PLUGIN_BUTTON'):
+	inc = inc + [cwd + "/dwin/plugins/button"]
+	src = src + Glob('./dwin/plugins/button/*.c')
 
-#add system plugins code
-if GetDepend('RT_USING_DW_SYSTEM'):
-	src = src + ['./dwlib/plugins/system/dw_system.c']
-	inc = inc + [cwd + '/dwlib/plugins/system']
+if GetDepend('PKG_DWIN_ENABLE_PLUGIN_ICON'):
+	inc = inc + [cwd + "/dwin/plugins/icon"]
+	src = src + Glob('./dwin/plugins/icon/*.c')
 
-#add cmd plugins code
-if GetDepend('RT_USING_DW_CMD'):
-	src = src + ['./dwlib/plugins/cmd/dw_cmd.c']
-	inc = inc + [cwd + '/dwlib/plugins/cmd']
+if GetDepend('PKG_DWIN_ENABLE_PLUGIN_INPUTBOX'):
+	inc = inc + [cwd + "/dwin/plugins/inputbox"]
+	src = src + Glob('./dwin/plugins/inputbox/*.c')
 
-#add login plugins code
-if GetDepend('RT_USING_DW_LOGIN'):
-	src = src + ['./dwlib/plugins/login/dw_login.c']
-	inc = inc + [cwd + '/dwlib/plugins/login']
-
-#add vicon plugins code
-if GetDepend('RT_USING_DW_VICON'):
-	src = src + ['./dwlib/plugins/vicon/dw_vicon.c']
-	inc = inc + [cwd + '/dwlib/plugins/vicon']
+if GetDepend('PKG_DWIN_ENABLE_PLUGIN_TEXTBOX'):
+	inc = inc + [cwd + "/dwin/plugins/textbox"]
+	src = src + Glob('./dwin/plugins/textbox/*.c')
 
 # add group to IDE project
-group = DefineGroup('Dwinlib', src, depend = ['RT_USING_DWIN'], CPPPATH = inc)
+group = DefineGroup('dwin', src, depend = ['PKG_USING_DWIN'], CPPPATH = inc)
 
 Return('group')
